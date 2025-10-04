@@ -1597,5 +1597,192 @@ class Car {
   start() { this.engine.start(); }
 }
 ```
+---
 
+## ⚖️ Law of Demeter (LoD)
 
+### 📘 Definition
+Also known as the **“Principle of Least Knowledge”**,  
+the **Law of Demeter** states that:
+
+> A module (or class) should have **limited knowledge** about other modules.  
+> It should **only talk to its immediate friends**, not strangers.
+
+---
+
+### 🚫 Avoid “Method Chaining” on Other Objects
+A class should **not** navigate through multiple objects to access a method or property.
+
+---
+
+### ❌ Bad Example — Violating LoD
+
+```typescript
+class Engine {
+  getPiston() {
+    return new Piston();
+  }
+}
+
+class Piston {
+  move() {
+    console.log("Piston moving...");
+  }
+}
+
+class Car {
+  constructor(private engine: Engine) {}
+
+  start() {
+    // ❌ Car is directly accessing Piston through Engine — too much knowledge
+    this.engine.getPiston().move();
+  }
+}
+
+const car = new Car(new Engine());
+car.start();
+
+- // Car knows too much about Engine’s internal structure.
+- // If the internal design of Engine changes, Car must also change.\
+- // This breaks encapsulation and increases coupling.
+```
+### ✅ Good Example — Following LoD
+
+```javascript
+class Engine {
+  start() {
+    console.log("Engine started...");
+  }
+}
+
+class Car {
+  constructor(private engine: Engine) {}
+
+  start() {
+    // ✅ Car only talks to Engine (its direct friend)
+    this.engine.start();
+  }
+}
+
+const car = new Car(new Engine());
+car.start();
+
+- // ✅ Car only interacts with Engine, not with its internal components.
+```
+
+## Modularity 
+
+Modularity refers to the design principle of breaking a system into smaller,
+self-contained units (modules) that can be developed, tested, and maintained
+independently. 
+
+## Separation of concerns
+
+A design principle for organizing code such that different concerns or
+responsibilities are separated into distinct modules or layers. 
+
+## 🔗 Loose Coupling vs Tight Coupling
+
+### 📘 Definition
+**Coupling** refers to the level of dependency between different modules, classes, or components in a system.  
+The **goal** in software design is to achieve **Loose Coupling** — where modules are independent, flexible, and reusable.
+
+---
+
+### 🧩 Loose Coupling
+
+### 🔹 Description
+- Modules are **minimally dependent** on each other.  
+- **Changes** in one module **do not affect** others.  
+- Achieved using **abstraction**, **interfaces**, and **dependency injection**.  
+- Common in **modular**, **microservice**, or **layered architectures**.
+
+---
+
+### ✅ Example — Loose Coupling in TypeScript
+
+```typescript
+// Abstraction
+interface Engine {
+  start(): void;
+}
+
+// Concrete Implementations
+class PetrolEngine implements Engine {
+  start() {
+    console.log("Petrol Engine started...");
+  }
+}
+
+class DieselEngine implements Engine {
+  start() {
+    console.log("Diesel Engine started...");
+  }
+}
+
+// High-level module depends on abstraction, not implementation
+class Car {
+  constructor(private engine: Engine) {}
+
+  start() {
+    this.engine.start();
+  }
+}
+
+const petrolCar = new Car(new PetrolEngine());
+petrolCar.start();
+
+const dieselCar = new Car(new DieselEngine());
+dieselCar.start();
+```
+
+### ⚠️ Tight Coupling
+
+### 🔹 Description
+- Modules are highly dependent on one another.
+- Any change in one module can break others.
+- Harder to test, maintain, or reuse components.
+- Common in monolithic systems or legacy codebases.
+
+---
+
+### ❌ Example — Tight Coupling in TypeScript
+
+```typescript
+class PetrolEngine {
+  start() {
+    console.log("Petrol Engine started...");
+  }
+}
+
+class Car {
+  private engine: PetrolEngine;
+
+  constructor() {
+    this.engine = new PetrolEngine(); // ❌ Direct dependency
+  }
+
+  start() {
+    this.engine.start();
+  }
+}
+
+const car = new Car();
+car.start();
+```
+
+> ✅ Best Practice: Always design for Loose Coupling to build scalable, flexible, and maintainable systems.
+
+## Tight Cohesion
+
+- Cohesion refers to how **closely related the responsibilities of a module** are.
+
+### Examples of Tight Cohesion
+
+#### Tight Cohesion:
+  - A class handling only user authentication.
+#### Low Cohesion:
+  - A class managing user authentication, payment processing, and email notifications.
+
+> ✅  Tip: Follow the Single Responsibility Principle SRP.
+---
