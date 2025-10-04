@@ -1117,3 +1117,155 @@ const myCar = new Car("Toyota");
 console.log(myCar.getBrand()); // Output: Toyota
 console.log(myCar.start());    // Output: Toyota car is starting...
 ```
+### 🧩 Abstraction using Abstract Class - TypeScript
+
+#### 🔹 What is Abstraction?
+Abstraction is the OOP principle of **hiding implementation details** and **exposing only essential features**.  
+> Abstract classes help achieve abstraction by defining a **blueprint** for other classes.
+
+---
+
+#### 🔹 Key Points
+- Cannot instantiate an **abstract class** directly.
+- Can contain:
+  - ✅ **Abstract methods** (no implementation) → must be implemented in subclasses.
+  - ✅ **Concrete methods** (with implementation) → reusable in subclasses.
+- Can have constructors and properties.
+- Supports access modifiers: `public`, `protected`, `private`.
+- Promotes code **reusability** and **consistency**.
+
+---
+
+####🔹 Syntax Example
+
+```typescript
+abstract class Animal {
+  constructor(public name: string) {}
+
+  abstract makeSound(): void; // must be implemented
+
+  move(): void {               // shared behavior
+    console.log(`${this.name} is moving`);
+  }
+}
+
+class Dog extends Animal {
+  makeSound(): void {
+    console.log("Bark!");
+  }
+}
+const dog = new Dog("Rocky");
+dog.makeSound(); // Bark!
+dog.move();      // Rocky is moving
+```
+✅ Dog implements abstract method makeSound() while inheriting concrete method move().
+
+### 🧩 Abstraction using Interface - TypeScript
+
+#### 🔹 What is Abstraction?
+Abstraction is the OOP principle of **hiding implementation details** and **exposing only essential behavior**.  
+> Interfaces achieve abstraction by defining a **contract** that classes or objects must follow.
+
+---
+
+#### 🔹 Key Points
+- Cannot instantiate an **interface** directly.
+- Only defines **structure**: methods, properties, function types.
+- Classes that implement the interface **must provide implementation** for all members.
+- Supports **multiple inheritance** — a class can implement multiple interfaces.
+- Promotes **type safety**, **consistency**, and **clean design**.
+
+---
+
+#### 🔹 Syntax Example
+
+```typescript
+interface Flyable {
+  fly(): void;
+}
+
+interface Swimmable {
+  swim(): void;
+}
+
+class Duck implements Flyable, Swimmable {
+  fly(): void {
+    console.log("Duck is flying");
+  }
+  swim(): void {
+    console.log("Duck is swimming");
+  }
+}
+
+const duck = new Duck();
+duck.fly();  // Duck is flying
+duck.swim(); // Duck is swimming
+```
+✅ The Duck class implements multiple interfaces, providing concrete behavior while hiding internal logic.
+
+### 🧩 Abstract Class vs Interface - TypeScript
+
+#### 🔹 Purpose
+Both are used for **abstraction** in TypeScript, but they serve different needs:
+
+- **Abstract Class:** Partial implementation + blueprint  
+- **Interface:** Pure blueprint / contract (structure only)
+
+---
+
+#### 🔹 Key Differences
+
+| Feature | Abstract Class | Interface |
+|---------|----------------|-----------|
+| Can have implementation | ✅ Yes | ❌ No |
+| Can define properties | ✅ Yes | ✅ Only type definitions |
+| Can have constructor | ✅ Yes | ❌ No |
+| Access modifiers | ✅ public, protected, private | ❌ All members are public |
+| Multiple inheritance | ❌ No (only extend one) | ✅ Yes (implement multiple interfaces) |
+| Use case | Shared logic + enforced structure | Contract or structure enforcement |
+
+---
+
+#### 🔹 Example: Abstract Class
+
+```typescript
+abstract class Animal {
+  abstract makeSound(): void;
+  move(): void { console.log("Moving..."); }
+}
+
+class Dog extends Animal {
+  makeSound(): void { console.log("Bark!"); }
+}
+
+const dog = new Dog();
+dog.makeSound(); // Bark!
+dog.move();      // Moving...
+```
+#### 🔹 Example: Interface
+
+```typescript
+interface Flyable { fly(): void; }
+interface Swimmable { swim(): void; }
+
+class Duck implements Flyable, Swimmable {
+  fly(): void { console.log("Flying"); }
+  swim(): void { console.log("Swimming"); }
+}
+
+const duck = new Duck();
+duck.fly();  // Flying
+duck.swim(); // Swimming
+```
+🔹 Key Takeaways
+
+Abstract Class: Use when you want shared logic + enforced methods
+
+Interface: Use when you want pure abstraction / structure
+
+A class can extend one abstract class and implement multiple interfaces
+
+Helps design consistent, maintainable, and type-safe code
+
+--- 
+# 🔹 Relationship In OOPS
