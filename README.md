@@ -1278,6 +1278,7 @@ In Object-Oriented Programming (OOP), **relationships** define how classes and o
 ## 🔹 1. Inheritance (IS-A)
 - One class **inherits** from another.
 - Promotes **code reuse**.
+  
 ```typescript
 class Vehicle { move() { console.log("Vehicle moving"); } }
 class Car extends Vehicle { drive() { console.log("Car driving"); } }
@@ -1310,6 +1311,7 @@ class Car {
 
 const car = new Car();
 car.startCar(); // Engine started
+
 -// ❌ The Engine cannot exist independently of Car in this example
 -// Engine is created inside Car.
 -// If Car is destroyed, the Engine is destroyed too.
@@ -1358,3 +1360,242 @@ class Student {
 const teacher = new Teacher("Mr. Sharma");
 const student = new Student("Riya", teacher);
 ```
+---
+
+# 🧩 Design Principle 
+
+- Design Principles are guidelines that help developers build scalable, maintainable, and loosely coupled software systems.
+- They make code easier to understand, modify, and extend.
+
+- 🔹 1. SOLID Principles
+- 🔹 2. DRY
+- 🔹 3. KISS
+- 🔹 4. YAGNI
+- 🔹 5. Composition over Inheritance 
+
+Advance Design Principle
+
+- 🔹 1. Law of Demeter
+- 🔹 2. Design Patterns
+- 🔹 3. Modularity
+- 🔹 4. Separation of Concerns
+- 🔹 5. Cohesion and Coupling
+
+### 🧩 Design Principles vs Design Patterns
+
+#### 🔹 Application
+- **Design Principles:** Guide the **overall design and architecture** of a system.  
+- **Design Patterns:** Address **specific design problems and scenarios**.
+
+---
+
+#### 🔹 Flexibility
+- **Design Principles:** Broadly applicable across **various contexts and projects**.  
+- **Design Patterns:** Applied to solve **particular problems in particular contexts**.
+
+---
+
+#### ✅ Summary
+| Aspect | Design Principles | Design Patterns |
+|--------|--------------------|-----------------|
+| Purpose | Guide architecture and structure | Solve specific recurring problems |
+| Scope | Broad and conceptual | Concrete and implementation-focused |
+| Example | SOLID, DRY, KISS | Singleton, Observer, Factory, Strategy |
+| Applicability | Throughout project lifecycle | Specific modules or use-cases |
+
+---
+## 🧱 S — Single Responsibility Principle (SRP)
+
+### 📘 Definition
+
+A **class should have only one reason to change** — it should handle **only one responsibility**.
+
+---
+### 💡 Example
+
+#### ❌ Wrong — Handles both report generation and printing
+
+```typescript
+class Report {
+  generate() {}
+  print() {}
+}
+class Report {
+  generate() {}
+}
+
+class ReportPrinter {
+  print(report: Report) {}
+}
+-// ✅ Benefit: Simplifies debugging, testing, and maintenance.
+```
+
+## 🧱 O — Open/Closed Principle (OCP)
+
+### 📘 Definition
+
+A class should be **open for extension but closed for modification** 
+Add new functionality by **extending**, not editing, existing code.
+
+---
+
+### 💡 Example
+
+```typescript
+abstract class Shape {
+  abstract area(): number;
+}
+
+class Circle extends Shape {
+  constructor(private radius: number) { super(); }
+  area() { return Math.PI * this.radius ** 2; }
+}
+
+class Square extends Shape {
+  constructor(private side: number) { super(); }
+  area() { return this.side ** 2; }
+}
+
+-// ✅ Benefit: Easy to add new shapes without changing existing code.
+```
+## 🧱 L — Liskov Substitution Principle (LSP)
+
+### 📘 Definition
+
+Subclasses should be **substitutable for their parent classes** without breaking functionality.
+
+---
+
+### 💡 Example
+
+```typescript
+class Bird { fly() {} }
+
+class Duck extends Bird {}  // ✅ Ok
+class Penguin extends Bird { // ❌ Violates LSP — can't fly
+  fly() { throw new Error("Can't fly"); }
+}
+
+-// ✅ Benefit: Ensures polymorphism works correctly.
+```
+
+## 🧱 I — Interface Segregation Principle (ISP)
+
+### 📘 Definition
+
+Clients should not be forced to depend on **interfaces they don’t use**.
+
+---
+
+### 💡 Example
+
+```typescript
+// ❌ Too big interface
+interface Worker {
+  work(): void;
+  eat(): void;
+}
+
+// ✅ Split into smaller interfaces
+interface Workable { work(): void; }
+interface Eatable { eat(): void; }
+
+class Robot implements Workable { work() {} }
+class Human implements Workable, Eatable { work() {}; eat() {}; }
+
+-// ✅ Benefit: Ensures polymorphism works correctly.
+```
+
+## 🧱 D — Dependency Inversion Principle (DIP)
+
+High-level modules should **not depend on low-level modules** — both should depend on **abstractions** (interfaces).
+
+---
+
+### 💡 Example
+Before
+```typescript
+class PetrolEngine {
+  start() {
+    console.log("Petrol Engine started...");
+  }
+}
+
+class Car {
+  private engine: PetrolEngine;
+
+  constructor() {
+    this.engine = new PetrolEngine(); // ❌ Direct dependency on concrete class
+  }
+
+  start() {
+    this.engine.start();
+  }
+}
+
+const car = new Car();
+car.start();
+
+-// Car is tightly coupled with PetrolEngine.
+-// If we want to use a DieselEngine or ElectricEngine, we must modify the Car class.
+```
+After
+```typescript
+interface Engine {
+  start(): void;
+}
+
+class PetrolEngine implements Engine {
+  start() {
+    console.log("Petrol Engine started...");
+  }
+}
+
+class DieselEngine implements Engine {
+  start() {
+    console.log("Diesel Engine started...");
+  }
+}
+
+class Car {
+  constructor(private engine: Engine) {} // ✅ Depends on abstraction, not concrete class
+
+  start() {
+    this.engine.start();
+  }
+}
+
+const petrolCar = new Car(new PetrolEngine());
+petrolCar.start();
+
+const dieselCar = new Car(new DieselEngine());
+dieselCar.start();
+```
+
+## 🔹 2. DRY Principle (Don't Repeat Yourself)
+
+Avoid code duplication — extract repeated logic into **functions or classes**.
+
+## 🔹 3. KISS Principle (Keep It Simple, Stupid)
+
+Keep code simple and readable. Avoid unnecessary complexity.
+
+## 🔹 4. YAGNI (You Aren’t Gonna Need It)
+
+Don’t add functionality until it’s actually needed.
+
+## 🔹 5. Composition over Inheritance
+
+- Prefer object composition to reuse functionality instead of deep inheritance.
+- Key Idea: Prefer "has-a" relationships (composition) over "is-a" relationships (inheritance) where appropriate.
+
+```javascript
+class Engine { start() { console.log("Engine started"); } }
+
+class Car {
+  constructor(private engine: Engine) {}
+  start() { this.engine.start(); }
+}
+```
+
+
