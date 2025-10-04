@@ -1268,4 +1268,93 @@ A class can extend one abstract class and implement multiple interfaces
 Helps design consistent, maintainable, and type-safe code
 
 --- 
-# 🔹 Relationship In OOPS
+
+# 🧩 OOP Relationships
+
+In Object-Oriented Programming (OOP), **relationships** define how classes and objects interact.
+
+---
+
+## 🔹 1. Inheritance (IS-A)
+- One class **inherits** from another.
+- Promotes **code reuse**.
+```typescript
+class Vehicle { move() { console.log("Vehicle moving"); } }
+class Car extends Vehicle { drive() { console.log("Car driving"); } }
+const car = new Car();
+car.move();  // Vehicle moving
+car.drive(); // Car driving
+```
+
+## 🔹 2. Composition / Aggregation (HAS-A)
+- One class **contains another**.
+- Promotes **modularity** and **code reuse**.
+- Aggregation (HAS-A) Weak relation (Parent and child are loosely coupled)
+- Composition (HAS-A) Strong (Child depends on the parent)
+
+- Example : Composition
+```typescript
+class Engine {
+  start() {
+    console.log("Engine started");
+  }
+}
+
+class Car {
+  engine = new Engine();
+  
+  startCar() {
+    this.engine.start();
+  }
+}
+
+const car = new Car();
+car.startCar(); // Engine started
+-// ❌ The Engine cannot exist independently of Car in this example
+-// Engine is created inside Car.
+-// If Car is destroyed, the Engine is destroyed too.
+```
+- Example : Aggregation
+```typescript
+class Engine {
+  start() {
+    console.log("Engine started");
+  }
+}
+
+class Car {
+  // Car **uses** an existing engine
+  constructor(private engine: Engine) {}
+
+  startCar() {
+    this.engine.start();
+  }
+}
+
+const engine = new Engine();  // Engine exists independently
+const car = new Car(engine);  // Car aggregates Engine
+car.startCar();               // Engine started
+
+// Engine can still exist without Car
+// Engine is created independently of Car.
+// Car just uses or aggregates it.
+// Shows looser coupling than Composition.
+```
+## 🔹 3. Association (USES-AS)
+Represents a general connection between classes.
+Can be one-to-one, one-to-many, or many-to-many.
+One class temporarily uses another class.
+Promotes loose coupling.
+
+```typescript
+class Teacher {
+  constructor(public name: string) {}
+}
+
+class Student {
+  constructor(public name: string, public teacher: Teacher) {}
+}
+
+const teacher = new Teacher("Mr. Sharma");
+const student = new Student("Riya", teacher);
+```
